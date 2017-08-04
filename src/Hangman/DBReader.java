@@ -9,13 +9,26 @@ import java.sql.Statement;
 
 public class DBReader {
 
-	private static Connection con;
+	private static DBReader dbReader;
+	private Connection con;
 	private static boolean hasData = false;
 	
-	private void getConnection() throws ClassNotFoundException, SQLException {
-		Class.forName("org.sqlite.JDBC");
-		con = DriverManager.getConnection("jdbc:sqlite:SQLITETest1.db"); //name der DB
-		initialise();
+	public static DBReader getConnection() {
+		if (dbReader == null) {
+			dbReader = new DBReader();
+		}
+		return dbReader;
+	}
+	
+	private DBReader() {
+		try {
+			Class.forName("org.sqlite.JDBC");
+			con = DriverManager.getConnection("jdbc:sqlite:SQLITETest1.db");
+			initialise();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} 
 	}
 	
 	private void initialise() throws SQLException {
@@ -46,30 +59,51 @@ public class DBReader {
 		}
 	}
 	
-	public String getRandomWord() {
-				
-		String returnString;
-		try {
-			if(con == null) {
-				try {
-					getConnection();
-				} catch (ClassNotFoundException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}	
-			}
-			Statement state = con.createStatement();
-			ResultSet res = state.executeQuery("SELECT word FROM words ORDER BY RANDOM() LIMIT 1"); //gezogene Query
-			res.next();
-			returnString = res.getString("word");
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			returnString = "";
-		} // + " " + rs.getString("umschreibung"));
-		return returnString;
-		
+	public String getRandomWord(int[] kategorieIDs) throws IllegalArgumentException, SQLException {
+		Statement state = con.createStatement();
+		ResultSet res = state.executeQuery("SELECT word FROM words ORDER BY RANDOM() LIMIT 1"); //gezogene Query
+		res.next();
+		return res.getString("word");
 	}
+	
+	
+	// Kategorie hinzufügen
+	public int addKategorie(String kategorieName) {
+	//TODO: addKategorie Funktion Schreiben
+		return 0;
+	}
+	
+	public int addWort(String wort, int kategorieID) {
+		return kategorieID;
+		// TODO: addWort Funktion schreiben
+	}
+	
+	
+	public int addSpieler(String spielerName) {
+		// TODO: addSpieler Funktion
+		return 0;
+	}
+	
+	public Game getStatus() {
+		return null;
+		// TODO: getStatus Funktion
+	}
+	
+	public Game setStatus() {
+		return null;
+// TODO: setStatus Funktion
+	}
+	
+	public Game loadGame() {
+		return null;
+		// TODO: Spiel Laden
+	}
+	
+	public Game saveGame() {
+		return null;
+		// TODO: Spiel Speichern
+	}
+	
 }
 	
 	

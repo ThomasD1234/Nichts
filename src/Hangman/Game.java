@@ -1,4 +1,5 @@
 package Hangman;
+import java.sql.SQLException;
 import java.util.HashMap;
 
 import javafx.animation.RotateTransition;
@@ -6,6 +7,8 @@ import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Parent;
@@ -75,9 +78,11 @@ public class Game implements Runnable {
 
     private HangmanImage hangman = new HangmanImage();
 
-    private DBReader wordReader = new DBReader();
+    private DBReader wordReader = DBReader.getConnection();
 
-    public Parent createContent() {
+    private int[] kategorieIDs;
+    
+    public Parent createContent() throws Exception{
         HBox rowLetters = new HBox();
         rowLetters.setAlignment(Pos.CENTER);
         letters = rowLetters.getChildren();
@@ -90,7 +95,18 @@ public class Game implements Runnable {
 
         Button btnAgain = new Button("NEW GAME");
         btnAgain.disableProperty().bind(playable);
-        btnAgain.setOnAction(event -> startGame());
+        btnAgain.setOnAction(new EventHandler<ActionEvent>(){
+
+			@Override
+			public void handle(ActionEvent event) {
+				try {
+					startGame();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+        });
+        // ActionEvent event -> startGame()
 
         // layout
         HBox row1 = new HBox();
@@ -140,14 +156,14 @@ public class Game implements Runnable {
         }
     }
 
-    private void startGame() {				
+    private void startGame() throws SQLException {				
         for (Text t : alphabet.values()) {
             t.setStrikethrough(false);
             t.setFill(Color.BLACK);
         }
 
         hangman.reset();
-        word.set(wordReader.getRandomWord().toUpperCase());
+        word.set(wordReader.getRandomWord(kategorieIDs).toUpperCase());
         lettersToGuess.set(word.length().get());
 
         letters.clear();

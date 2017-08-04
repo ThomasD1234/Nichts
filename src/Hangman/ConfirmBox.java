@@ -45,8 +45,12 @@ public class ConfirmBox implements Runnable{
         choiceBoxSchwierigkeit.setValue("Normal");
         GridPane.setConstraints(choiceBoxSchwierigkeit, 1, 2);
     /*  Falls die Auswahl live übergeben werden soll    
-    *   choiceBoxSchwierigkeit.getSelectionModel().selectedItemProperty().addListener( (v, oldValue, newValue) -> System.out.println(newValue) );
-    */  
+    *   choiceBoxSchwierigkeit.getSelectionModel().selectedItemProperty().addListener( (v, oldValue, newValue) -> System.out.println(newValue) ); */
+        choiceBoxSchwierigkeit.getSelectionModel().selectedItemProperty().addListener( (v, oldValue, newValue) -> {
+        	if(newValue != "Normal")
+        		System.out.println(newValue);
+        });
+     
         
         
         
@@ -70,6 +74,9 @@ public class ConfirmBox implements Runnable{
         listView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         GridPane.setConstraints(listView, 1, 4);
         
+        // TODO: Select All / Deselect All Button bauen
+        
+        
         //Einstellungen bestätigen Label
         Label korrektLabel = new Label("Alle Einstellungen korrekt?");
         GridPane.setConstraints(korrektLabel, 0, 5);
@@ -84,7 +91,7 @@ public class ConfirmBox implements Runnable{
         startButton.setOnAction(e -> handleOptions(box));	
         
         /* startButton.setOnAction(e -> System.out.println(nameInput.getText()));
-        	   
+        Button soll gleich alles abspeichern   
         	
         */
         
