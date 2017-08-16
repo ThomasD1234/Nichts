@@ -78,7 +78,7 @@ public class Game implements Runnable {
 
     private HangmanImage hangman = new HangmanImage();
 
-    private DBReader wordReader = DBReader.getConnection();
+    private DBReader wordReader = new DBReader();
 
     private int[] kategorieIDs;
     
