@@ -27,32 +27,21 @@ public class ConfirmBox implements Runnable{
         Label topLabel = new Label("Wählen Sie Ihre gewünschten Einstellungen");
         GridPane.setConstraints(topLabel, 0, 0);
 
-        //Name Label 
-        Label nameLabel = new Label("Spielername:");
-        GridPane.setConstraints(nameLabel, 0, 1);
+        //Spieler1 Label 
+        Label nameLabel1 = new Label("Spieler 1:");
+        GridPane.setConstraints(nameLabel1, 0, 1);
 
-        //Name Input
-        TextField nameInput = new TextField("Bucky");
-        GridPane.setConstraints(nameInput, 1, 1);
-      
-        //Schwierigkeitsgrad Label
-        Label skillLabel = new Label("Gewünschter Schwierigkeitsgrad:");
-        GridPane.setConstraints(skillLabel, 0, 2);
+        //Spieler1 Input
+        TextField nameInput1 = new TextField("Bucky");
+        GridPane.setConstraints(nameInput1, 1, 1);
         
-        //Schwierigkeitsgrad Auswahl
-        ChoiceBox<String> choiceBoxSchwierigkeit = new ChoiceBox<>();
-        choiceBoxSchwierigkeit.getItems().addAll("Einfach", "Normal", "Schwer", "Benutzerdefiniert");
-        choiceBoxSchwierigkeit.setValue("Normal");
-        GridPane.setConstraints(choiceBoxSchwierigkeit, 1, 2);
-    /*  Falls die Auswahl live übergeben werden soll    
-    *   choiceBoxSchwierigkeit.getSelectionModel().selectedItemProperty().addListener( (v, oldValue, newValue) -> System.out.println(newValue) ); */
-        choiceBoxSchwierigkeit.getSelectionModel().selectedItemProperty().addListener( (v, oldValue, newValue) -> {
-        	if(newValue != "Normal")
-        		System.out.println(newValue);
-        });
-     
-        
-        
+        //Spieler2 Label 
+        Label nameLabel2 = new Label("Spieler 2:");
+        GridPane.setConstraints(nameLabel2, 0, 2);
+
+        //Spieler2 Input
+        TextField nameInput2 = new TextField("Fucky");
+        GridPane.setConstraints(nameInput2, 1, 2);
         
         //Fehlversuche Label 
         Label fehlerLabel = new Label("Maximale Anzahl Fehlversuche:");
@@ -73,30 +62,29 @@ public class ConfirmBox implements Runnable{
         listView.getItems().addAll("Berühmtheiten", "Biologie", "Geographie", "Fantasy");
         listView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         GridPane.setConstraints(listView, 1, 4);
-        
+       
         // TODO: Select All / Deselect All Button bauen
+        Label kategorieAuswahlLabel = new Label("Kategorien wählen:");
+        GridPane.setConstraints(kategorieAuswahlLabel, 0, 5);
         
+        Button selectAllButton = new Button("Alles Auswählen");
+        Button deselectAllButton = new Button("Alles Abwählen");
         
-        //Einstellungen bestätigen Label
-        Label korrektLabel = new Label("Alle Einstellungen korrekt?");
-        GridPane.setConstraints(korrektLabel, 0, 5);
-        
-        //Einstellungen bestätigt Checkbox
-        CheckBox box = new CheckBox();
-        GridPane.setConstraints(box, 1, 5);
+        HBox hBox = new HBox();
+        hBox.getChildren().addAll(selectAllButton, deselectAllButton);
+        GridPane.setConstraints(hBox, 1, 5);
         
         //Button zum Gamestart
         Button startButton = new Button("Spiel starten");
         GridPane.setConstraints(startButton, 2, 5);
-        startButton.setOnAction(e -> handleOptions(box));	
+       
+        startButton.setOnAction(e -> System.out.println("Es Spielen " + nameInput1.getText() + " gegen " + nameInput2.getText() + " in den Kategorien " +
+        		listView.getSelectionModel().getSelectedItems() + ". Die maximale Anzahl Fehlversuche beträgt: " + choiceBoxFehlversuche.getSelectionModel().getSelectedItem()));
         
-        /* startButton.setOnAction(e -> System.out.println(nameInput.getText()));
-        Button soll gleich alles abspeichern   
-        	
-        */
+        // TODO: Set und Get Settings
         
         //Add Interface
-        grid.getChildren().addAll(topLabel, nameLabel, nameInput, skillLabel, choiceBoxSchwierigkeit, fehlerLabel, choiceBoxFehlversuche, kategorieLabel, listView, korrektLabel, box, startButton);
+        grid.getChildren().addAll(topLabel, nameLabel1, nameInput1, nameLabel2, nameInput2, fehlerLabel, choiceBoxFehlversuche, kategorieLabel, listView, kategorieAuswahlLabel, hBox, startButton);
         grid.setAlignment(Pos.CENTER);
         Scene scene = new Scene(grid);
         primaryStage.setScene(scene);
@@ -118,15 +106,45 @@ public class ConfirmBox implements Runnable{
 		}
 	}
 
-	private static void handleOptions(CheckBox box){
+}	
+
+/*
+//Schwierigkeitsgrad Label
+Label skillLabel = new Label("Gewünschter Schwierigkeitsgrad:");
+GridPane.setConstraints(skillLabel, 0, 2);
+
+//Schwierigkeitsgrad Auswahl
+ChoiceBox<String> choiceBoxSchwierigkeit = new ChoiceBox<>();
+choiceBoxSchwierigkeit.getItems().addAll("Einfach", "Normal", "Schwer", "Benutzerdefiniert");
+choiceBoxSchwierigkeit.setValue("Normal");
+GridPane.setConstraints(choiceBoxSchwierigkeit, 1, 2);
+/*  Falls die Auswahl live übergeben werden soll    
+*   choiceBoxSchwierigkeit.getSelectionModel().selectedItemProperty().addListener( (v, oldValue, newValue) -> System.out.println(newValue) ); 
+choiceBoxSchwierigkeit.getSelectionModel().selectedItemProperty().addListener( (v, oldValue, newValue) -> {
+	if(newValue != "Normal")
+		System.out.println(newValue);
+});
+
+
+  
+        //Einstellungen bestätigen Label
+        Label korrektLabel = new Label("Alle Einstellungen korrekt?");
+        GridPane.setConstraints(korrektLabel, 0, 5);
+        
+        //Einstellungen bestätigt Checkbox
+        CheckBox box = new CheckBox();
+        GridPane.setConstraints(box, 1, 5);
+
+
+private static void handleOptions(CheckBox box){
         String message = "User hat ";
 
         if(box.isSelected())
             message += "bestätigt" + "\n";
         else message += "nicht bestätigt" + "\n";
         
-        /*
-        Zugriff auf Kategorien    */
+        
+        Zugriff auf Kategorien    
         ObservableList<String> kategorien;
         kategorien = listView.getSelectionModel().getSelectedItems();
         
@@ -139,4 +157,6 @@ public class ConfirmBox implements Runnable{
         System.out.println(message);
     }
 
-}
+
+
+*/

@@ -43,25 +43,25 @@ public class DBReader {
 			if ( !res.next() ) {
 				System.out.println("Building the Words table with prepopulated values.");
 				
-				// need build the table
-				// Erzeuge Tabele words
+		// Erzeuge Tabele words
 				Statement state2 = con.createStatement();
 				state2.execute("CREATE TABLE words(id integer NOT NULL,"
 						+ "word varchar(60)," + "umschreibung varchar(120),"
 						+ "kategorie varchar(60)," + "primary key(id));" );
 		
-				// TODO: Hier müßen doch bestimmt noch die anderen tabellen angelegt werden?
-				// Erzeuge Tabelle kategorien
+		// Erzeuge Tabelle kategorien
 				Statement state3 = con.createStatement();
-				state3.execute("CREATE TABLE IF NOT EXISTS kategorien(id integer," + "kategorie varchar(60)," + "primary key(id));");
-			/*		
-				// Erzeuge Tabelle status
+				state3.execute("CREATE TABLE kategorien(id integer," + "kategorie varchar(60)," + "primary key(id));");
 				
-				// Erzeuge Tabelle spieler
+		// Erzeuge Tabelle status
+				Statement state4 = con.createStatement();
+				state4.execute("CREATE TABLE status(name varchar(60)," + "wert varchar(60)," + "primary key(name));" );
+				
+		// Erzeuge Tabelle spieler
 				Statement state5 = con.createStatement();
-				state5.executeQuery("CREATE TABLE spieler(id integer," + "spielerName varchar(60)," + "highscore integer" +"primary key(id));");
-				*/
-				// inserting some sample data
+				state5.execute("CREATE TABLE spieler(id integer," + "spielerName varchar(60)," + "highscore integer," + "primary key(id));");
+				
+		// Befülle Tabelle words
 				PreparedStatement prep = con.prepareStatement("INSERT INTO words values(?,?,?,?);");
 				prep.setString(2, "Ente");
 				prep.setString(3, "Bewohner von Stadteichen");
@@ -74,10 +74,37 @@ public class DBReader {
 				prep2.setString(4, "Tier");
 				prep2.execute();
 				
+		// Befülle Tabelle kategorien
 				PreparedStatement prep3 = con.prepareStatement("INSERT INTO kategorien values(?,?);");
 				prep3.setString(2, "Tier");
 				prep3.execute();
+								
+		// Befülle Tabelle status
+				PreparedStatement prep4 = con.prepareStatement("INSERT INTO status values(?,?);");
+				prep4.setString(1, "Fehlversuche");
+				prep4.setString(2, "8");
+				prep4.execute();
 				
+				PreparedStatement prep5 = con.prepareStatement("INSERT INTO status values(?,?);");
+				prep5.setString(1, "Letztes Wort");
+				prep5.setString(2, "");
+				prep5.execute();
+				
+				PreparedStatement prep6 = con.prepareStatement("INSERT INTO status values(?,?);");
+				prep6.setString(1, "Letzte Eingaben");
+				prep6.setString(2, "");
+				prep6.execute();
+				
+				PreparedStatement prep7 = con.prepareStatement("INSERT INTO status values(?,?);");
+				prep7.setString(1, "Letzte Kategorien");
+				prep7.setString(2, "0");
+				prep7.execute();
+				
+		// Befülle Tabelle spieler
+				PreparedStatement prep8 = con.prepareStatement("INSERT INTO spieler values(?,?,?);");
+				prep8.setString(2, "Franz");
+				prep8.setString(3, "12000");
+				prep8.execute();
 			}	
 		}
 	}
