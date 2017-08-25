@@ -78,33 +78,49 @@ public class DBReader {
 				PreparedStatement prep3 = con.prepareStatement("INSERT INTO kategorien values(?,?);");
 				prep3.setString(2, "Tier");
 				prep3.execute();
-								
-		// Befülle Tabelle status
-				PreparedStatement prep4 = con.prepareStatement("INSERT INTO status values(?,?);");
-				prep4.setString(1, "Fehlversuche");
-				prep4.setString(2, "8");
+				
+				PreparedStatement prep4 = con.prepareStatement("INSERT INTO kategorien values(?,?);");
+				prep4.setString(2, "Berühmtheiten");
 				prep4.execute();
 				
-				PreparedStatement prep5 = con.prepareStatement("INSERT INTO status values(?,?);");
-				prep5.setString(1, "Letztes Wort");
-				prep5.setString(2, "");
+				PreparedStatement prep5 = con.prepareStatement("INSERT INTO kategorien values(?,?);");
+				prep5.setString(2, "Biologie");
 				prep5.execute();
 				
-				PreparedStatement prep6 = con.prepareStatement("INSERT INTO status values(?,?);");
-				prep6.setString(1, "Letzte Eingaben");
-				prep6.setString(2, "");
+				PreparedStatement prep6 = con.prepareStatement("INSERT INTO kategorien values(?,?);");
+				prep6.setString(2, "Geographie");
 				prep6.execute();
 				
-				PreparedStatement prep7 = con.prepareStatement("INSERT INTO status values(?,?);");
-				prep7.setString(1, "Letzte Kategorien");
-				prep7.setString(2, "0");
+				PreparedStatement prep7 = con.prepareStatement("INSERT INTO kategorien values(?,?);");
+				prep7.setString(2, "Fantasy");
 				prep7.execute();
 				
-		// Befülle Tabelle spieler
-				PreparedStatement prep8 = con.prepareStatement("INSERT INTO spieler values(?,?,?);");
-				prep8.setString(2, "Franz");
-				prep8.setString(3, "12000");
+		// Befülle Tabelle status
+				PreparedStatement prep8 = con.prepareStatement("INSERT INTO status values(?,?);");
+				prep8.setString(1, "Fehlversuche");
+				prep8.setString(2, "8");
 				prep8.execute();
+				
+				PreparedStatement prep9 = con.prepareStatement("INSERT INTO status values(?,?);");
+				prep9.setString(1, "Letztes Wort");
+				prep9.setString(2, "");
+				prep9.execute();
+				
+				PreparedStatement prep10 = con.prepareStatement("INSERT INTO status values(?,?);");
+				prep10.setString(1, "Letzte Eingaben");
+				prep10.setString(2, "");
+				prep10.execute();
+				
+				PreparedStatement prep11 = con.prepareStatement("INSERT INTO status values(?,?);");
+				prep11.setString(1, "Letzte Kategorien");
+				prep11.setString(2, "0");
+				prep11.execute();
+				
+		// Befülle Tabelle spieler
+				PreparedStatement prep12 = con.prepareStatement("INSERT INTO spieler values(?,?,?);");
+				prep12.setString(2, "Franz");
+				prep12.setString(3, "12000");
+				prep12.execute();
 			}	
 		}
 	}
