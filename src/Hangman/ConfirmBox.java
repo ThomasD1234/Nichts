@@ -5,6 +5,8 @@ import javafx.scene.*;
 import javafx.scene.layout.*;
 import javafx.scene.control.*;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.geometry.*;
 
 public class ConfirmBox implements Runnable{
@@ -79,7 +81,7 @@ public class ConfirmBox implements Runnable{
                 
         //Wortkategorie Auswahl
         listView = new ListView<>();
-        listView.getItems().addAll("Tiere", "Berühmtheiten", "Biologie", "Geographie", "Fantasy");
+        listView.getItems().addAll(new DBReader().getKategorien());
         listView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         GridPane.setConstraints(listView, 1, 4);
        
@@ -100,7 +102,17 @@ public class ConfirmBox implements Runnable{
         //Button zum Gamestart
         Button startButton = new Button("Spiel starten");
         GridPane.setConstraints(startButton, 2, 5);
-        startButton.setOnAction(e -> new Game());
+        
+        startButton.setOnAction(new EventHandler<ActionEvent>() {
+			
+			@Override
+			public void handle(ActionEvent event) {
+				// TODO Auto-generated method stub
+				//new DBReader().addKategorie(kategorieInput.getText());
+				//listView.getItems().add(kategorieInput.getText());
+			}
+		});
+ //       startButton.setOnAction(e -> new Game());
   //    startButton.setOnAction(e -> System.out.println("Es Spielen " + nameInput1.getText() + " gegen " + nameInput2.getText() + " in den Kategorien " +
   //      	listView.getSelectionModel().getSelectedItems() + ". Die maximale Anzahl Fehlversuche beträgt: " + choiceBoxFehlversuche.getSelectionModel().getSelectedItem()));
         
