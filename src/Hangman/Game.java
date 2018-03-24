@@ -28,7 +28,7 @@ import javafx.scene.transform.Rotate;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
-public class Game implements Runnable {
+public class Game {
 
 	// Fenstgröße und Schriftart, muss natürlich hübscher
     private static final int APP_W = 1280; 
@@ -163,7 +163,7 @@ public class Game implements Runnable {
         }
 
         hangman.reset();
-        word.set(wordReader.getRandomWord(kategorieIDs).toUpperCase());
+        word.set(wordReader.getRandomWord(kategorieIDs).toUpperCase());   //TODO: hier wahrscheinlich die direkte wortübergabe intergrieren? booleanwert zur unterscheidung
         lettersToGuess.set(word.length().get());
 
         letters.clear();
@@ -317,7 +317,7 @@ public class Game implements Runnable {
         startGame();
     }
 
-	@Override
+/*	@Override
 	public void run() {
 		try {
 			start(MainMenu.getprimaryStage());
@@ -329,7 +329,7 @@ public class Game implements Runnable {
 	}
 
 
-/*    public static void main(String[] args) {
+    public static void main(String[] args) {
         launch(args);
     } */
 } 

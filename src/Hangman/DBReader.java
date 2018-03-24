@@ -170,7 +170,15 @@ public class DBReader {
 			Statement state = con.createStatement();
 			ResultSet res = state.executeQuery("SELECT * FROM words");
 			ObservableList<String> wörterListe = ObservableList<String>;
-			;
+			while (res.next()) {
+				wörterListe.add(res.getString(1));
+			}
+			String[] returnArray = new String[wörterListe.size()];
+			return wörterListe.toArray(returnArray);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return new String[0];
 		}
 	} */
 	

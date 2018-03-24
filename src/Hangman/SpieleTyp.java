@@ -4,17 +4,20 @@ import javafx.stage.*;
 import javafx.scene.*;
 import javafx.scene.layout.*;
 import javafx.scene.control.*;
+
+import java.sql.SQLException;
+
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.*;
 
-public class ConfirmBox implements Runnable{
+public class SpieleTyp implements Runnable{
 
 	ListView<String> listView;
 	boolean isMultiPlayer;
 	
-	public ConfirmBox(boolean isMultiPlayer) {
+	public SpieleTyp(boolean isMultiPlayer) {
 		this.isMultiPlayer = isMultiPlayer; 
 	}
 	
@@ -95,18 +98,28 @@ public class ConfirmBox implements Runnable{
         Button deselectAllButton = new Button("Alles Abwählen");
         deselectAllButton.setOnAction(e -> listView.getSelectionModel().clearSelection());
         
-        HBox hBox = new HBox();
+        HBox hBox = new HBox(20);
         hBox.getChildren().addAll(selectAllButton, deselectAllButton);
         GridPane.setConstraints(hBox, 1, 5);
         
         //Button zum Gamestart
-        Button startButton = new Button("Spiel starten");
+        Button startButton = new Button("Spiel starten 34345");
         GridPane.setConstraints(startButton, 2, 5);
         
         startButton.setOnAction(new EventHandler<ActionEvent>() {
 			
 			@Override
 			public void handle(ActionEvent event) {
+				try {
+					(new Game()).start(primaryStage);
+					    // (new Thread(new Game())).start();
+				} catch (Exception e) {
+					e.printStackTrace();
+				};
+				
+				
+				
+				
 				// TODO Auto-generated method stub
 				//new DBReader().addKategorie(kategorieInput.getText());
 				//listView.getItems().add(kategorieInput.getText());
@@ -121,8 +134,8 @@ public class ConfirmBox implements Runnable{
         //TODO: multiplayer und singleplayer confirmbox bauen ==> boolean dann für gameinstanz
         
         if (isMultiPlayer) {
-        	//true = SP
-        	grid.getChildren().addAll(topLabel, nameLabel1, nameInput1, nameLabel2, nameInput2, fehlerLabel, choiceBoxFehlversuche, kategorieLabel, listView, kategorieAuswahlLabel, hBox, startButton);
+        	//true = MP
+        	grid.getChildren().addAll(topLabel, nameLabel1, nameInput1, nameLabel2, nameInput2, fehlerLabel, choiceBoxFehlversuche, startButton);
         }
         else {
         	grid.getChildren().addAll(topLabel, nameLabel, nameInput, fehlerLabel, choiceBoxFehlversuche, kategorieLabel, listView, kategorieAuswahlLabel, hBox, startButton);
@@ -150,55 +163,4 @@ public class ConfirmBox implements Runnable{
 
 }	
 
-/*
-//Schwierigkeitsgrad Label
-Label skillLabel = new Label("Gewünschter Schwierigkeitsgrad:");
-GridPane.setConstraints(skillLabel, 0, 2);
 
-//Schwierigkeitsgrad Auswahl
-ChoiceBox<String> choiceBoxSchwierigkeit = new ChoiceBox<>();
-choiceBoxSchwierigkeit.getItems().addAll("Einfach", "Normal", "Schwer", "Benutzerdefiniert");
-choiceBoxSchwierigkeit.setValue("Normal");
-GridPane.setConstraints(choiceBoxSchwierigkeit, 1, 2);
-/*  Falls die Auswahl live übergeben werden soll    
-*   choiceBoxSchwierigkeit.getSelectionModel().selectedItemProperty().addListener( (v, oldValue, newValue) -> System.out.println(newValue) ); 
-choiceBoxSchwierigkeit.getSelectionModel().selectedItemProperty().addListener( (v, oldValue, newValue) -> {
-	if(newValue != "Normal")
-		System.out.println(newValue);
-});
-
-
-  
-        //Einstellungen bestätigen Label
-        Label korrektLabel = new Label("Alle Einstellungen korrekt?");
-        GridPane.setConstraints(korrektLabel, 0, 5);
-        
-        //Einstellungen bestätigt Checkbox
-        CheckBox box = new CheckBox();
-        GridPane.setConstraints(box, 1, 5);
-
-
-private static void handleOptions(CheckBox box){
-        String message = "User hat ";
-
-        if(box.isSelected())
-            message += "bestätigt" + "\n";
-        else message += "nicht bestätigt" + "\n";
-        
-        
-        Zugriff auf Kategorien    
-        ObservableList<String> kategorien;
-        kategorien = listView.getSelectionModel().getSelectedItems();
-        
-        for(String k: kategorien){
-        	message +=k + "\n";
-        }
-        	
-    
-        
-        System.out.println(message);
-    }
-
-
-
-*/

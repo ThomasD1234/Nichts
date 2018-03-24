@@ -28,8 +28,8 @@ public class MainMenu extends Application {
     private static Stage pStage;
     
     private List<Pair<String, Runnable>> menuData = Arrays.asList(				
-    		new Pair<String, Runnable>("Single Player", new	ConfirmBox(false)),	
-    	    new Pair<String, Runnable>("Multiplayer", new ConfirmBox(true)),
+    		new Pair<String, Runnable>("Single Player", new	SpieleTyp(false)),	
+    	    new Pair<String, Runnable>("Multiplayer", new SpieleTyp(true)),
             new Pair<String, Runnable>("Wörterdatenbank", new Settings()),
             new Pair<String, Runnable>("Exit to Desktop", Platform::exit)
     );

@@ -6,6 +6,7 @@ import javafx.scene.layout.*;
 import javafx.scene.control.*;
 
 import java.sql.SQLException;
+import java.util.Optional;
 
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -44,7 +45,8 @@ public class Settings implements Runnable{
 			@Override
 			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
 				// TODO Auto-generated method stub ===> hier übergeben des newValue an die tableview der wörter
-				System.out.println("ausgewählt ist" + newValue);
+				System.out.println("ausgewählt ist " + newValue);
+				//tableViewWörter.getItems().addAll(new DBReader().getWörter());
 			}
         }) ;
         GridPane.setConstraints(listViewKategorien, 0, 1);
@@ -73,7 +75,28 @@ public class Settings implements Runnable{
         
         //Kategorie hinzufügen Button
         Button kategorieHinzufügenButton = new Button("Hinzufügen");
-       
+        kategorieHinzufügenButton.setOnAction(new EventHandler<ActionEvent>() {
+
+			@Override
+			public void handle(ActionEvent event) {
+				// TODO Auto-generated method stub
+				TextInputDialog dialog = new TextInputDialog();
+				dialog.setTitle("Kategorie hinzufügen");
+				dialog.setHeaderText("Welche Kategorie möchten Sie hinzufügen");
+				dialog.setContentText("Kategorie:");
+
+				// Traditional way to get the response value.
+				Optional<String> result = dialog.showAndWait();
+				if (result.isPresent()){
+				    System.out.println("Neue Kategorie hinzugefügt: " + result.get());
+				    new DBReader().addKategorie(result.get());
+				}
+
+				// The Java 8 way to get the response value (with lambda expression).
+				//result.ifPresent(name -> System.out.println("Your name: " + name));
+			}
+        	
+		});
         // Kategorie löschen Button
         Button kategorieLöschenButton = new Button("Löschen");
         
@@ -141,38 +164,6 @@ public class Settings implements Runnable{
 }	
 
 	
-/* ALTES ZEUGS
- * 
-   // Top Label - constrains use (child, column, row)
-        Label topLabel = new Label("Wörter hinzufügen");
-        GridPane.setConstraints(topLabel, 0, 0);
-        
-        //Wort Label 
-        Label wortLabel = new Label("Zu eratendes Wort:");
-        GridPane.setConstraints(wortLabel, 0, 1);
-        
-        //Umschreibung Label 
-        Label umschreibungLabel = new Label("Suchwort:");
-        GridPane.setConstraints(umschreibungLabel, 0, 2);
-        
-        //Wort Input 
-        TextField wortInput = new TextField("Wort");
-        GridPane.setConstraints(wortInput, 1, 1);
-        
-        //Umschreibung Input 
-        TextField umschreibungInput = new TextField("Umschreibung");
-        GridPane.setConstraints(umschreibungInput, 1, 2);
-  
-  		//neue Kategorien Label
-        Label neueKategorieAuswahlLabel = new Label("Bestehende Kategorien:");
-        GridPane.setConstraints(neueKategorieAuswahlLabel, 0, 4);
-        
-        //Kategorie hinzufügen
-        TextField kategorieInput = new TextField("Neue Kategorie");
-        GridPane.setConstraints(kategorieInput, 1, 4);
-  
-  
- 
- * */
+
 
 	
