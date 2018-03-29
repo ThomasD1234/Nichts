@@ -104,7 +104,7 @@ public class MainMenu extends Application {
         menuBox.setTranslateY(y);
         menuData.forEach(data -> {
             MenuItem item = new MenuItem(data.getKey());
-            item.setOnAction(data.getValue());					// hier wird das lambda geholt
+            item.setOnAction(data.getValue());					
             item.setTranslateX(-300);
 
             Rectangle clip = new Rectangle(300, 30);

@@ -37,7 +37,7 @@ public class SpieleTyp implements Runnable{
         // Top Label - constrains use (child, column, row)
         Label topLabel = new Label("Wählen Sie Ihre gewünschten Einstellungen");
         GridPane.setConstraints(topLabel, 0, 0);
-
+        
         //Spieler Label SinglePlayer
         Label nameLabel = new Label("Spielername:");
         GridPane.setConstraints(nameLabel, 0, 1);
@@ -102,24 +102,32 @@ public class SpieleTyp implements Runnable{
         hBox.getChildren().addAll(selectAllButton, deselectAllButton);
         GridPane.setConstraints(hBox, 1, 5);
         
-        //Button zum Gamestart
-        Button startButton = new Button("Spiel starten 34345");
-        GridPane.setConstraints(startButton, 2, 5);
         
+        
+      //MultiplayerButton zur ersten Worteingabe		
+      	Button multiplayerButton = new Button("Spiel starten");
+        GridPane.setConstraints(multiplayerButton, 2, 5);
+
+      		multiplayerButton.setOnAction(null); {
+      			grid.getChildren().addAll();
+      		};
+        
+      		
+      	//Button zum Gamestart
+        Button startButton = new Button("Spiel starten");
+        GridPane.setConstraints(startButton, 2, 5);	
         startButton.setOnAction(new EventHandler<ActionEvent>() {
 			
 			@Override
 			public void handle(ActionEvent event) {
 				try {
-					(new Game()).start(primaryStage);
+					(new Game(isMultiPlayer, "Karl", "bob")).start(primaryStage);
 					    // (new Thread(new Game())).start();
 				} catch (Exception e) {
 					e.printStackTrace();
 				};
-				
-				
-				
-				
+		
+		
 				// TODO Auto-generated method stub
 				//new DBReader().addKategorie(kategorieInput.getText());
 				//listView.getItems().add(kategorieInput.getText());
@@ -135,7 +143,7 @@ public class SpieleTyp implements Runnable{
         
         if (isMultiPlayer) {
         	//true = MP
-        	grid.getChildren().addAll(topLabel, nameLabel1, nameInput1, nameLabel2, nameInput2, fehlerLabel, choiceBoxFehlversuche, startButton);
+        	grid.getChildren().addAll(topLabel, nameLabel1, nameInput1, nameLabel2, nameInput2, fehlerLabel, choiceBoxFehlversuche, multiplayerButton);
         }
         else {
         	grid.getChildren().addAll(topLabel, nameLabel, nameInput, fehlerLabel, choiceBoxFehlversuche, kategorieLabel, listView, kategorieAuswahlLabel, hBox, startButton);

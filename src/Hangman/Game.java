@@ -44,6 +44,11 @@ public class Game {
     private SimpleStringProperty word = new SimpleStringProperty();
 
     /**
+     * Single- or Multiplayer
+     */
+    private boolean isMultiplayer = true;
+    
+    /**
      * How many letters left to guess
      */
     private SimpleIntegerProperty lettersToGuess = new SimpleIntegerProperty();
@@ -81,6 +86,11 @@ public class Game {
     private DBReader wordReader = new DBReader();
 
     private int[] kategorieIDs;
+    
+    public Game(boolean isMulpiplayer, String name1, String name2) {
+    	this.isMultiplayer = isMulpiplayer;
+    	    	
+    }
     
     public Parent createContent() throws Exception{
         HBox rowLetters = new HBox();
@@ -156,14 +166,23 @@ public class Game {
         }
     }
 
-    private void startGame() throws SQLException {				
+    private void startGame() throws SQLException, InterruptedException {				
         for (Text t : alphabet.values()) {
             t.setStrikethrough(false);
             t.setFill(Color.BLACK);
         }
 
         hangman.reset();
-        word.set(wordReader.getRandomWord(kategorieIDs).toUpperCase());   //TODO: hier wahrscheinlich die direkte wortübergabe intergrieren? booleanwert zur unterscheidung
+        
+        if(isMultiplayer) {
+        	MultiplayerEingabe inputDialog = new MultiplayerEingabe("Karl"); // TODO Klassenvariable Spielernamen
+        	Thread inputDialogThread = new Thread(inputDialog);
+        	inputDialogThread.start();
+        	inputDialogThread.join();
+        } else {
+        	word.set(wordReader.getRandomWord(kategorieIDs).toUpperCase());   
+        }
+        
         lettersToGuess.set(word.length().get());
 
         letters.clear();
