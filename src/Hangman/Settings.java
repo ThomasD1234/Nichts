@@ -1,9 +1,11 @@
 package Hangman;
 
 import javafx.stage.*;
+import javafx.util.Pair;
 import javafx.scene.*;
 import javafx.scene.layout.*;
 import javafx.scene.control.*;
+import javafx.scene.control.ButtonBar.ButtonData;
 
 import java.sql.SQLException;
 import java.util.Optional;
@@ -111,7 +113,7 @@ public class Settings implements Runnable{
         Label wortBearbeitenLabel = new Label("Wort bearbeiten:");
         GridPane.setConstraints(wortBearbeitenLabel, 1, 3);
         
-        // Wort löschen Button
+        // Wort bearbeiten Button
         Button wortBearbeitenButton = new Button("Beartbeiten");
         
         // Wort löschen Button
@@ -119,18 +121,59 @@ public class Settings implements Runnable{
         
         //Hinzufügen Button
         Button wortHinzufügenButton = new Button("Hinzufügen");
-  //      GridPane.setConstraints(wortHinzufügenButton, 1, 5);
-  //      hinzufügenButton.setOnAction(e -> new DBReader().addKategorie(kategorieInput.getText()));
         wortHinzufügenButton.setOnAction(new EventHandler<ActionEvent>() {
 			
 			@Override
 			public void handle(ActionEvent event) {
 				// TODO Auto-generated method stub TRENNUNG
+				// Custom Dialog
+				Dialog<Pair<String, String>> dialog = new Dialog<>();
+				dialog.setTitle("Wort hinzufügen");
+				dialog.setHeaderText("Geben Sie die benötigten Daten ein");
+				
+				//Set Button Types
+				ButtonType wortHinzufuegen = new ButtonType("Hinzufügen", ButtonData.OK_DONE);
+				dialog.getDialogPane().getButtonTypes().addAll(wortHinzufuegen, ButtonType.CANCEL);
+				
+				// Textinputfelder anlegen
+				GridPane grid = new GridPane();
+				grid.setHgap(10);
+				grid.setVgap(10);
+				grid.setPadding(new Insets(20, 150, 10, 10));
+
+				TextField wort = new TextField();
+				wort.setPromptText("Wort");
+				TextField umschreibung = new TextField();
+				umschreibung.setPromptText("Umschreibung");
+				listViewKategorien = new ListView<>();
+				listViewKategorien.getItems().addAll(new DBReader().getKategorien());
+				listViewKategorien.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+		        GridPane.setConstraints(listViewKategorien, 1, 2);
+				grid.add(new Label("Wort:"), 0, 0);
+				grid.add(wort, 1, 0);
+				grid.add(new Label("Umschreibung:"), 0, 1);
+				grid.add(umschreibung, 1, 1);
+				
+				//TODO Listview einbinden
+				dialog.getDialogPane().setContent(grid);
+				Optional<Pair<String, String>> result = dialog.showAndWait();
+				//Optional<>;
+				/*TextInputDialog dialog = new TextInputDialog();
+				dialog.setTitle("Wort hinzufügen");
+				dialog.setHeaderText("Welches Wort möchten Sie hinzufügen");
+				dialog.setContentText("Wort:");
+				dialog.setContentText("Umschreibung:");
+				
+				Optional<String> result = dialog.showAndWait();
+				if (result.isPresent()){
+				    System.out.println("Neues Wort hinzugefügt: " + result.get());
+			//	    new DBReader().addWort(result.get());
+				}
 			//	new DBReader().addKategorie(kategorieInput.getText());
 			//	listView.getItems().add(kategorieInput.getText());
 				
 				listViewKategorien.getSelectionModel().getSelectedIndex();
-			//	new DBReader().addWort(wortInput.getText(), umschreibungInput.getText(), listView.getSelectionModel().getSelectedIndex());
+			//	new DBReader().addWort(wortInput.getText(), umschreibungInput.getText(), listView.getSelectionModel().getSelectedIndex()); */
 			}
 		});
         

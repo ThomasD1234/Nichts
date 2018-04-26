@@ -89,6 +89,7 @@ public class Game {
     
     public Game(boolean isMulpiplayer, String name1, String name2) {
     	this.isMultiplayer = isMulpiplayer;
+    	
     	    	
     }
     
@@ -110,7 +111,12 @@ public class Game {
 			@Override
 			public void handle(ActionEvent event) {
 				try {
-					startGame();
+					try {
+						startGame();
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 				} catch (SQLException e) {
 					e.printStackTrace();
 				}

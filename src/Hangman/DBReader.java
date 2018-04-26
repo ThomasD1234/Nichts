@@ -78,7 +78,7 @@ public class DBReader {
 				// Erzeuge Tabele words
 				Statement state2 = con.createStatement();
 				state2.execute("CREATE TABLE words(id integer NOT NULL," + "word varchar(60),"
-						+ "umschreibung varchar(120)," + "kategorie integer," + "primary key(id), foreign key(kategorie) references kategorien(id));");
+						+ "umschreibung varchar(120)," + "kategorieID integer," + "primary key(id), foreign key(kategorieID) references kategorien(id));");
 
 				// Erzeuge Tabelle status
 				Statement state4 = con.createStatement();
@@ -140,15 +140,20 @@ public class DBReader {
 				prep10.execute();
 
 				PreparedStatement prep11 = con.prepareStatement("INSERT INTO status values(?,?);");
-				prep11.setString(1, "Letzte Kategorien");
-				prep11.setString(2, "0");
+				prep11.setString(1, "Spieler1");
+				prep11.setString(2, "");
 				prep11.execute();
 
-				// Befülle Tabelle spieler
-				PreparedStatement prep12 = con.prepareStatement("INSERT INTO spieler values(?,?,?);");
-				prep12.setString(2, "Franz");
-				prep12.setString(3, "12000");
+				PreparedStatement prep12 = con.prepareStatement("INSERT INTO status values(?,?);");
+				prep12.setString(1, "Spieler2");
+				prep12.setString(2, "");
 				prep12.execute();
+				
+				// Befülle Tabelle spieler
+				PreparedStatement prep13 = con.prepareStatement("INSERT INTO spieler values(?,?,?);");
+				prep13.setString(2, "Franz");
+				prep13.setString(3, "12000");
+				prep13.execute();
 			}
 //		closeConnection();	
 		}
