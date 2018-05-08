@@ -6,9 +6,11 @@ import javafx.scene.layout.*;
 import javafx.scene.control.*;
 
 import java.sql.SQLException;
+import java.util.Optional;
 
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.geometry.*;
 
@@ -64,7 +66,7 @@ public class SpieleTyp implements Runnable{
         
 //Inputs        
         //Spieler Input SinglePlayer
-        TextField nameInput = new TextField("Bucky");
+        TextField nameInput = new TextField("Lucky");
         GridPane.setConstraints(nameInput, 1, 1);
         
         //Spieler2 Input
@@ -78,7 +80,7 @@ public class SpieleTyp implements Runnable{
 //Auswahlen        
         //Fehlversuche Auswahl
         ChoiceBox<String> choiceBoxFehlversuche = new ChoiceBox<>();
-        choiceBoxFehlversuche.getItems().addAll("12", "10", "8", "6", "4");
+        choiceBoxFehlversuche.getItems().addAll("12", "10", "8");
         choiceBoxFehlversuche.setValue("8");
         GridPane.setConstraints(choiceBoxFehlversuche, 1, 3);
                 
@@ -108,12 +110,20 @@ public class SpieleTyp implements Runnable{
       	Button multiplayerButton = new Button("Spiel starten");
         GridPane.setConstraints(multiplayerButton, 2, 5);
 
-      		multiplayerButton.setOnAction(null); {
-      			grid.getChildren().addAll();
-      		};
+      		multiplayerButton.setOnAction(new EventHandler<ActionEvent>() {
+
+				public void handle(ActionEvent event) {
+					  try {
+						new Game(isMultiPlayer, nameInput1.getText(), nameInput2.getText(), Integer.parseInt(choiceBoxFehlversuche.getValue())).start(primaryStage);
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}	      			
+				}
+			}); 
         
       		
-      	//Button zum Gamestart
+      	//Button zum Gamestart für SinglePlayer
         Button startButton = new Button("Spiel starten");
         GridPane.setConstraints(startButton, 2, 5);	
         startButton.setOnAction(new EventHandler<ActionEvent>() {
@@ -121,8 +131,9 @@ public class SpieleTyp implements Runnable{
 			@Override
 			public void handle(ActionEvent event) {
 				try {
-					(new Game(isMultiPlayer, "Karl", "bob")).start(primaryStage);
-					    // (new Thread(new Game())).start();
+					new Game(isMultiPlayer, nameInput.getText(), new String(), Integer.parseInt((String) choiceBoxFehlversuche.getValue())).start(primaryStage);
+					//TODO 	Spieleinstellungen übernehmen 	
+					// (new Thread(new Game())).start();
 				} catch (Exception e) {
 					e.printStackTrace();
 				};

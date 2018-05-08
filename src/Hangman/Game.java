@@ -1,6 +1,7 @@
 package Hangman;
 import java.sql.SQLException;
 import java.util.HashMap;
+import java.util.Optional;
 
 import javafx.animation.RotateTransition;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -14,6 +15,7 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.TextInputDialog;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
@@ -87,10 +89,26 @@ public class Game {
 
     private int[] kategorieIDs;
     
-    public Game(boolean isMulpiplayer, String name1, String name2) {
+    private int maxFehlversuche;
+    
+    private SimpleStringProperty name1;
+    
+    private SimpleStringProperty name2;
+    
+    private SimpleIntegerProperty score1;
+    
+    private SimpleIntegerProperty score2;
+    
+    private boolean isPlayer1;
+    
+    public Game(boolean isMulpiplayer, String name1, String name2, int maxFehlversuche) {
     	this.isMultiplayer = isMulpiplayer;
-    	
-    	    	
+    	this.maxFehlversuche = maxFehlversuche;
+    	this.name1 = new SimpleStringProperty(name1);	
+    	this.name2 = new SimpleStringProperty(name2);	
+    	this.score1 = new SimpleIntegerProperty(0);
+    	this.score2 = new SimpleIntegerProperty(0);
+    	this.isPlayer1 = true;
     }
     
     public Parent createContent() throws Exception{
@@ -100,14 +118,20 @@ public class Game {
 
         playable.bind(hangman.lives.greaterThan(0).and(lettersToGuess.greaterThan(0)));
         playable.addListener((obs, old, newValue) -> {
-            if (!newValue.booleanValue())
-                stopGame();
+            if (!newValue.booleanValue()) {
+	            if (isMultiplayer) {
+	            	switchPlayer();
+	            } else {
+	            	stopGame();
+	            }
+            }
         });
 
         Button btnAgain = new Button("NEW GAME");
+        btnAgain.setAlignment(Pos.CENTER);
         btnAgain.disableProperty().bind(playable);
         btnAgain.setOnAction(new EventHandler<ActionEvent>(){
-
+        
 			@Override
 			public void handle(ActionEvent event) {
 				try {
@@ -147,13 +171,20 @@ public class Game {
         hyphen.setFont(DEFAULT_FONT);
         alphabet.put('-', hyphen);
         rowAlphabet.getChildren().add(hyphen);
-
+        
+        Text textNameplate = new Text();
+        textNameplate.textProperty().bind(name1);
+        
         Text textScore = new Text();
         textScore.textProperty().bind(score.asString().concat(" Points"));
-
-        HBox rowHangman = new HBox(10, btnAgain, textScore, hangman);
+        
+        HBox rowScore = new HBox(10, textNameplate, textScore); 
+        rowScore.setAlignment(Pos.CENTER);
+        
+        HBox rowHangman = new HBox(10, hangman); //TODO hangman aus hbox raus
         rowHangman.setAlignment(Pos.CENTER);
-
+        
+        
         VBox vBox = new VBox(10);
         // vertical layout
         vBox.getChildren().addAll(
@@ -161,7 +192,9 @@ public class Game {
                 rowLetters,
                 row3,
                 rowAlphabet,
-                rowHangman);
+                rowScore,
+                rowHangman,
+                btnAgain);	//TODO btnAgain mittig?
         return vBox;
     }
 
@@ -172,6 +205,21 @@ public class Game {
         }
     }
 
+    private void switchPlayer() {
+    	if (isPlayer1) {
+    		isPlayer1 = false;
+    	}
+    	else {
+    		isPlayer1 = true;
+    	}
+    	try {
+			startGame();
+		} catch (SQLException | InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    }
+    
     private void startGame() throws SQLException, InterruptedException {				
         for (Text t : alphabet.values()) {
             t.setStrikethrough(false);
@@ -181,10 +229,7 @@ public class Game {
         hangman.reset();
         
         if(isMultiplayer) {
-        	MultiplayerEingabe inputDialog = new MultiplayerEingabe("Karl"); // TODO Klassenvariable Spielernamen
-        	Thread inputDialogThread = new Thread(inputDialog);
-        	inputDialogThread.start();
-        	inputDialogThread.join();
+        	word.set(getWordFromFilthyHuman());
         } else {
         	word.set(wordReader.getRandomWord(kategorieIDs).toUpperCase());   
         }
@@ -291,6 +336,29 @@ public class Game {
         }
     }
 
+    public String getWordFromFilthyHuman() {
+    	TextInputDialog dialog = new TextInputDialog("Suchwort");
+		dialog.setTitle("Suchworteingabe");
+		dialog.setHeaderText("Bitte Suchwort für " + getCurrentPlayername() + " eingeben:");
+		dialog.setContentText("Suchwort:");
+
+		// Traditional way to get the response value.
+		Optional<String> result = dialog.showAndWait();
+		if (result.isPresent()){
+		    return result.get();
+		} else {
+			return getWordFromFilthyHuman();
+		}
+    }
+    
+    private String getCurrentPlayername() {
+    	if (isPlayer1) {
+    		return name1.getValue();
+    	} else {
+    		return name2.getValue();
+    	}
+    } 	
+    
     public void start(Stage primaryStage) throws Exception {
         Scene scene2 = new Scene(createContent());
         scene2.setOnKeyPressed((KeyEvent event) -> {
