@@ -162,7 +162,7 @@ public class DBReader {
 	//Zufälliges Wort erhalten
 	public String getRandomWord(int[] kategorieIDs) throws IllegalArgumentException, SQLException {
 		Statement state = getConnection().createStatement();
-		ResultSet res = state.executeQuery("SELECT word FROM words ORDER BY RANDOM() LIMIT 1"); // gezogene
+		ResultSet res = state.executeQuery("SELECT word FROM words ORDER BY RANDOM() LIMIT 1 WHERE kategorieIDs = SpieleTyp.listview.getK"); // gezogene
 																								// Query
 		res.next();
 		return res.getString("word");

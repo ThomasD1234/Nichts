@@ -114,7 +114,7 @@ public class SpieleTyp implements Runnable{
 
 				public void handle(ActionEvent event) {
 					  try {
-						new Game(isMultiPlayer, nameInput1.getText(), nameInput2.getText(), Integer.parseInt(choiceBoxFehlversuche.getValue())).start(primaryStage);
+						new Game(isMultiPlayer, nameInput1.getText(), nameInput2.getText(), Integer.parseInt(choiceBoxFehlversuche.getValue()), new Integer[0]).start(primaryStage);
 					} catch (Exception e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
@@ -127,11 +127,21 @@ public class SpieleTyp implements Runnable{
         Button startButton = new Button("Spiel starten");
         GridPane.setConstraints(startButton, 2, 5);	
         startButton.setOnAction(new EventHandler<ActionEvent>() {
-			
+        
 			@Override
 			public void handle(ActionEvent event) {
 				try {
-					new Game(isMultiPlayer, nameInput.getText(), new String(), Integer.parseInt((String) choiceBoxFehlversuche.getValue())).start(primaryStage);
+					Integer[] auswahlKategorieIDs = new Integer[0]; 
+					auswahlKategorieIDs = listView.getSelectionModel().getSelectedIndices().toArray(auswahlKategorieIDs);
+					for ( int i = 0; i < auswahlKategorieIDs.length; i++  ) {
+						auswahlKategorieIDs[i] = auswahlKategorieIDs[i] + 1; 
+					}
+					new Game(isMultiPlayer, nameInput.getText(), new String(), Integer.parseInt((String) choiceBoxFehlversuche.getValue()), auswahlKategorieIDs).start(primaryStage);
+					
+					
+					listView.getSelectionModel().getSelectedItems().toArray(new String[0]);
+			        String[] testarray = listView.getSelectionModel().getSelectedItems().toArray(new String[0]);
+			        
 					//TODO 	Spieleinstellungen übernehmen 	
 					// (new Thread(new Game())).start();
 				} catch (Exception e) {

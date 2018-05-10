@@ -101,7 +101,11 @@ public class Game {
     
     private boolean isPlayer1;
     
-    public Game(boolean isMulpiplayer, String name1, String name2, int maxFehlversuche) {
+    private SimpleStringProperty currentPlayername;
+    
+    private Integer[] auswahlKategorieIDs;
+    
+    public Game(boolean isMulpiplayer, String name1, String name2, int maxFehlversuche, Integer auswahlKategorieIDs[]) {
     	this.isMultiplayer = isMulpiplayer;
     	this.maxFehlversuche = maxFehlversuche;
     	this.name1 = new SimpleStringProperty(name1);	
@@ -109,6 +113,8 @@ public class Game {
     	this.score1 = new SimpleIntegerProperty(0);
     	this.score2 = new SimpleIntegerProperty(0);
     	this.isPlayer1 = true;
+    	this.currentPlayername = new SimpleStringProperty(getCurrentPlayername());
+    	this.auswahlKategorieIDs = auswahlKategorieIDs;
     }
     
     public Parent createContent() throws Exception{
@@ -173,7 +179,7 @@ public class Game {
         rowAlphabet.getChildren().add(hyphen);
         
         Text textNameplate = new Text();
-        textNameplate.textProperty().bind(name1);
+        textNameplate.textProperty().bind(currentPlayername);
         
         Text textScore = new Text();
         textScore.textProperty().bind(score.asString().concat(" Points"));
@@ -206,12 +212,8 @@ public class Game {
     }
 
     private void switchPlayer() {
-    	if (isPlayer1) {
-    		isPlayer1 = false;
-    	}
-    	else {
-    		isPlayer1 = true;
-    	}
+    	isPlayer1 =!isPlayer1;
+    	currentPlayername.set(getCurrentPlayername());
     	try {
 			startGame();
 		} catch (SQLException | InterruptedException e) {
@@ -229,7 +231,7 @@ public class Game {
         hangman.reset();
         
         if(isMultiplayer) {
-        	word.set(getWordFromFilthyHuman());
+        	word.set(getWordFromHuman());
         } else {
         	word.set(wordReader.getRandomWord(kategorieIDs).toUpperCase());   
         }
@@ -336,7 +338,7 @@ public class Game {
         }
     }
 
-    public String getWordFromFilthyHuman() {
+    public String getWordFromHuman() {
     	TextInputDialog dialog = new TextInputDialog("Suchwort");
 		dialog.setTitle("Suchworteingabe");
 		dialog.setHeaderText("Bitte Suchwort für " + getCurrentPlayername() + " eingeben:");
@@ -347,7 +349,7 @@ public class Game {
 		if (result.isPresent()){
 		    return result.get();
 		} else {
-			return getWordFromFilthyHuman();
+			return getWordFromHuman();
 		}
     }
     
